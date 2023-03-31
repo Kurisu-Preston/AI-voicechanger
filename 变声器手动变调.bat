@@ -1,4 +1,3 @@
-CALL D:\anaconda\Scripts\activate.bat F:\Dependencies
-cd F:\diff-svc_aqua_pack
+CALL .\minianaconda\Scripts\activate.bat .\Dependencies
 python flask_api.py
 pause
