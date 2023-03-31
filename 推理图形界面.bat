@@ -1,4 +1,3 @@
-CALL C:\ProgramData\Anaconda3\Scripts\activate.bat D:\svc\Dependencies
-cd D:\svc\diff-svc_aqua_pack
+CALL .\minianaconda\Scripts\activate.bat .\Dependencies
 python gui.py
 pause
