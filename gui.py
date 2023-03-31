@@ -11,6 +11,7 @@ import logging
 from infer_tools.infer_tool import *
 import gradio as gr
 import json
+import webbrowser
 
 logging.getLogger('numba').setLevel(logging.WARNING)
 svc_model = None
@@ -81,6 +82,6 @@ with app:
                 联系方式：电邮：kameiliduo0825@gmail.com, b站：https://space.bilibili.com/18801308\n
                 免责声明：由于使用本模型造成的法律纠纷本人概不负责
             """)
-
+    webbrowser.open("http://127.0.0.1:7860")
     app.launch(share=False)
             
