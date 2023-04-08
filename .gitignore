@@ -129,4 +129,6 @@ dmypy.json
 .pyre/
 
 .DS_Store
-aqua/*.ckpt
+/aqua/*.ckpt
+*.pt
+/checkpoints
