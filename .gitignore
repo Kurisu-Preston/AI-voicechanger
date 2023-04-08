@@ -133,3 +133,4 @@ dmypy.json
 *.pt
 /checkpoints
 *.wav
+infer_tools/f0_temp.json
