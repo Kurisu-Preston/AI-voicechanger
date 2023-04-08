@@ -132,3 +132,4 @@ dmypy.json
 /aqua/*.ckpt
 *.pt
 /checkpoints
+*.wav
