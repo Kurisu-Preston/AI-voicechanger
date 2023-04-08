@@ -25,7 +25,7 @@ def load_model(model_path, device='cuda'):
 
     generator = Generator(h).to(device)
 
-    cp_dict = torch.load(model_path)
+    cp_dict = torch.load(model_path, map_location=device)
     generator.load_state_dict(cp_dict['generator'])
     generator.eval()
     generator.remove_weight_norm()

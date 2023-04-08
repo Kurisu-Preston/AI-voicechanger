@@ -8,6 +8,7 @@ import numpy as np
 import yaml
 from resemblyzer import VoiceEncoder
 from tqdm import tqdm
+import torch
 
 from infer_tools.f0_static import static_f0_time
 from modules.vocoders.nsf_hifigan import NsfHifiGAN
@@ -178,7 +179,8 @@ class SvcBinarizer:
         lengths = []
         total_sec = 0
         if self.binarization_args['with_spk_embed']:
-            voice_encoder = VoiceEncoder().cuda()
+            voice_encoder = VoiceEncoder()
+            if torch.cuda.is_available(): voice_encoder.cuda()
         for item_name, meta_data in self.meta_data_iterator(prefix):
             args.append([item_name, meta_data, self.binarization_args])
         spec_min = []
