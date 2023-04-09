@@ -82,8 +82,8 @@ def get_pitch_parselmouth(wav_data, mel, hparams):
 
 
 def get_pitch_crepe(wav_data, mel, hparams, threshold=0.05):
-    # device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-    device = torch.device("cuda")
+    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+    # device = torch.device("cuda")
     # crepe只支持16khz采样率，需要重采样
     wav16k = resampy.resample(wav_data, hparams['audio_sample_rate'], 16000)
     wav16k_torch = torch.FloatTensor(wav16k).unsqueeze(0).to(device)
@@ -158,7 +158,7 @@ class File2Batch:
                     gt_f0 = np.array(f0_dict[md5]["f0"])
                     coarse_f0 = np.array(f0_dict[md5]["coarse"])
                 else:
-                    torch.cuda.is_available() and torch.cuda.empty_cache()
+                    if torch.cuda.is_available(): torch.cuda.empty_cache()
                     gt_f0, coarse_f0 = get_pitch_crepe(wav, mel, hparams, threshold=0.05)
                 if infer:
                     f0_dict[md5] = {"f0": gt_f0.tolist(), "coarse": coarse_f0.tolist(), "time": int(time.time())}

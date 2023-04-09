@@ -68,7 +68,7 @@ class Svc:
         }
 
         self.model_path = model_path
-        self.dev = torch.device("cuda")
+        self.dev = torch.device("cuda") if torch.cuda.is_available() else torch.device("cpu")
 
         self._ = set_hparams(config=config_name, exp_name=self.project_name, infer=True,
                              reset=True, hparams_str='', print_hparams=False)
@@ -85,7 +85,7 @@ class Svc:
             spec_min=hparams['spec_min'], spec_max=hparams['spec_max'],
         )
         utils.load_ckpt(self.model, self.model_path, 'model', force=True, strict=True)
-        self.model.cuda()
+        if torch.cuda.is_available(): self.model.cuda()
         self.vocoder = NsfHifiGAN()
 
     def infer(self, in_path, key, acc, spk_id=0, use_crepe=True, singer=False):
@@ -96,13 +96,16 @@ class Svc:
         @timeit
         def diff_infer():
             spk_embed = batch.get('spk_embed') if not hparams['use_spk_id'] else batch.get('spk_ids')
-            energy = batch.get('energy').cuda() if batch.get('energy') else None
-            if spk_embed is None:
-                spk_embed = torch.LongTensor([0])
-            diff_outputs = self.model(
+            energy = batch.get('energy')
+            if energy and torch.cuda.is_available(): energy = energy.cuda()
+            if spk_embed is None: spk_embed = torch.LongTensor([0])
+            return self.model(
                 hubert=batch['hubert'].cuda(), spk_embed_id=spk_embed.cuda(), mel2ph=batch['mel2ph'].cuda(),
-                f0=batch['f0'].cuda(), energy=energy, ref_mels=batch["mels"].cuda(), infer=True)
-            return diff_outputs
+                f0=batch['f0'].cuda(), energy=energy, ref_mels=batch["mels"].cuda(), infer=True
+            ) if torch.cuda.is_available() else self.model(
+                hubert=batch['hubert'], spk_embed_id=spk_embed, mel2ph=batch['mel2ph'],
+                f0=batch['f0'], energy=energy, ref_mels=batch["mels"], infer=True
+            )
 
         outputs = diff_infer()
         batch['outputs'] = outputs['mel_out']
@@ -133,7 +136,7 @@ class Svc:
         if len(f0_pred) > len(mel_pred_mask):
             f0_pred = f0_pred[:len(mel_pred_mask)]
         f0_pred = f0_pred[mel_pred_mask]
-        torch.cuda.is_available() and torch.cuda.empty_cache()
+        if torch.cuda.is_available(): torch.cuda.empty_cache()
 
         if singer:
             data_path = in_path.replace("batch", "singer_data")
@@ -179,10 +182,14 @@ class Svc:
 
 def getitem(item):
     max_frames = hparams['max_frames']
-    spec = torch.Tensor(item['mel'])[:max_frames]
+    spec = torch.Tensor(item['mel'])[:max_frames] if 'mel' in item else None
     mel2ph = torch.LongTensor(item['mel2ph'])[:max_frames] if 'mel2ph' in item else None
-    f0, uv = norm_interp_f0(item["f0"][:max_frames], hparams)
-    hubert = torch.Tensor(item['hubert'][:hparams['max_input_tokens']])
+    if 'f0' in item:
+        f0, uv = norm_interp_f0(item["f0"][:max_frames], hparams)
+    else: f0 = uv = None
+    if 'hubert' in item:
+        hubert = torch.Tensor(item['hubert'][:hparams['max_input_tokens']])
+    else: hubert = None
     pitch = torch.LongTensor(item.get("pitch"))[:max_frames]
     sample = {
         "id": item['id'],
