@@ -4,7 +4,7 @@ Singing Voice Conversion via diffusion model
 
 ## 本仓库为基于diff-svc fork重构版的AI阿夸变声器  
 > 原仓库：[diff-svc](https://github.com/prophesier/diff-svc)  
-> VST插件：(https://github.com/zhaohui8969/VST_NetProcess-)
+> VST插件：[async http process VST plugin](https://github.com/zhaohui8969/VST_NetProcess-)
 
 ## 注意事项/Notes：
 
