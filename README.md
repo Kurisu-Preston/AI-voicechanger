@@ -24,6 +24,7 @@ git clone https://github.com/Kurisu-Preston/AI-aqua-vc
 ```
 将4.0整合包中的minianaconda和Dependencies拖入直接双击运行bat.  
 模型下载后放在aqua文件夹，checkpoints直接在根目录下解压.  
+自动变调功能为将调整输入源音高以适应数据集音域，可以使得声音更像，但是不是完全自动，如效果不好须在vst插件内调整pitch.  
 不提供训练代码和相关辅助.  
 
 ## Acknowledgements
