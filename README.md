@@ -19,7 +19,7 @@ Singing Voice Conversion via diffusion model
 > If you use this project for any other plans, please contact and inform the author of this repository in advance. Thank
 > you very much.
 
-## 使用方法：
+## 使用方法/Instructions：
 ```
 git clone https://github.com/Kurisu-Preston/AI-aqua-vc
 ```
