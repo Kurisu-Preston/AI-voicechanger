@@ -27,6 +27,7 @@ git clone https://github.com/Kurisu-Preston/AI-aqua-vc
 模型下载后放在aqua文件夹，checkpoints直接在根目录下解压.  
 自动变调功能为将调整输入源音高以适应数据集音域，可以使得声音更像，但是不是完全自动，如效果不好须在vst插件内调整pitch.  
 不提供训练代码和相关辅助.  
+Drag and drop the mini-anaconda and Dependencies from the 4.0 integration package into the bat file for direct execution. After downloading, place the model in the aqua folder, and unzip the checkpoints directly in the root directory. The automatic pitch shifting feature adjusts the pitch of the input source to fit the dataset's range, which can make the sound more similar, but it is not completely automatic; if the effect is not good, adjust the pitch inside the VST plugin. Training code and related support are not provided.
 
 ## Acknowledgements
 
